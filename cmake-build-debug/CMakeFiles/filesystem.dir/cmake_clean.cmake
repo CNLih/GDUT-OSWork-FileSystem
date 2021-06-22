@@ -1,6 +1,7 @@
 file(REMOVE_RECURSE
   "CMakeFiles/filesystem.dir/file.c.obj"
   "CMakeFiles/filesystem.dir/memory.c.obj"
+  "CMakeFiles/filesystem.dir/mysys.c.obj"
   "CMakeFiles/filesystem.dir/util/form.c.obj"
   "filesystem.exe"
   "filesystem.exe.manifest"

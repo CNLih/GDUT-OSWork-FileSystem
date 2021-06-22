@@ -7,10 +7,9 @@
 
 //1block = EACH_BLOCK_SIZE byte
 #define EACH_BLOCK_SIZE       64
-//文件名不长于24
-#define MAX_NAME_SIZE       24
 
-#define SYS_DISC     ("SYS_DISC")
+//已经加载的磁盘数
+int LoadDiscSize = 0;
 
 int createDisc(const char *name, int size);
 

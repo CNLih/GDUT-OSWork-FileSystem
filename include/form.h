@@ -5,10 +5,6 @@
 #ifndef FILESYSTEM_FORM_H
 #define FILESYSTEM_FORM_H
 
-typedef struct formNode{
-    void *data;
-}formNode;
-
 typedef struct form{
     int maxSize;
     int size;

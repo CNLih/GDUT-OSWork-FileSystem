@@ -86,10 +86,13 @@
 		<Unit filename="D:/Programme/C/filesystem/filesystem/include/memory.h">
 			<Option target="filesystem"/>
 		</Unit>
-		<Unit filename="D:/Programme/C/filesystem/filesystem/include/sys.h">
+		<Unit filename="D:/Programme/C/filesystem/filesystem/include/mysys.h">
 			<Option target="filesystem"/>
 		</Unit>
 		<Unit filename="D:/Programme/C/filesystem/filesystem/memory.c">
+			<Option target="filesystem"/>
+		</Unit>
+		<Unit filename="D:/Programme/C/filesystem/filesystem/mysys.c">
 			<Option target="filesystem"/>
 		</Unit>
 		<Unit filename="D:/Programme/C/filesystem/filesystem/util/form.c">

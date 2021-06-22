@@ -17,28 +17,28 @@ typedef struct discType{
     char *DiscName;
     form *BlockForm;
     int MaxBlockSize;
+    fpos_t off;       //磁盘空间inode表的偏移量
 }discType;
 
 discType *loadedDisc[MAX_LOAD_DISC];
-int LoadSize = 0;
 
 void myDestroy(void *data){
     free(data);
 }
 
 void initBlocks(int maxSize, const char *name){
-    loadedDisc[LoadSize] = (discType *)malloc(sizeof(discType));
-    loadedDisc[LoadSize]->MaxBlockSize = maxSize;
-    loadedDisc[LoadSize]->DiscName = (char *) malloc(sizeof(char) * MAX_NAME_SIZE);
-    memcpy(loadedDisc[LoadSize]->DiscName, name, MAX_NAME_SIZE);
-    loadedDisc[LoadSize]->BlockForm = formInit(myDestroy, maxSize);
+    loadedDisc[LoadDiscSize] = (discType *)malloc(sizeof(discType));
+    loadedDisc[LoadDiscSize]->MaxBlockSize = maxSize;
+    loadedDisc[LoadDiscSize]->DiscName = (char *) malloc(sizeof(char) * MAX_NAME_SIZE);
+    memcpy(loadedDisc[LoadDiscSize]->DiscName, name, MAX_NAME_SIZE);
+    loadedDisc[LoadDiscSize]->BlockForm = formInit(myDestroy, maxSize);
 
     for(int i = 0; i < maxSize; i ++){
         int* data = (int *) malloc(sizeof(int));
         *data = -2;
-        loadedDisc[LoadSize]->BlockForm->head[i] = data;
+        loadedDisc[LoadDiscSize]->BlockForm->head[i] = data;
     }
-    LoadSize ++;
+    LoadDiscSize ++;
 }
 
 #define addItem(i, data, index)         do{                    \
@@ -57,7 +57,7 @@ void initBlocks(int maxSize, const char *name){
 
 int findBlockIdByName(const char *name){
     int blockNum;
-    for(blockNum = 0; blockNum < LoadSize; blockNum ++){
+    for(blockNum = 0; blockNum < LoadDiscSize; blockNum ++){
         if(!strcmp(loadedDisc[blockNum]->DiscName, name)){
             return blockNum;
         }
@@ -86,8 +86,8 @@ void discLoadStore(){
     FILE *fp;
     fp = fopen(SYS_DISC, "w+");
 
-    fprintf(fp, "%d  ", LoadSize);      //登记已经加载到挂载的磁盘
-    for(int i = 0; i < LoadSize; i ++){
+    fprintf(fp, "%d  ", LoadDiscSize);      //登记已经加载到挂载的磁盘
+    for(int i = 0; i < LoadDiscSize; i ++){
         fprintf(fp, "%24s  ", loadedDisc[i]->DiscName);
         fprintf(fp, "%d  ", loadedDisc[i]->BlockForm->maxSize);
 

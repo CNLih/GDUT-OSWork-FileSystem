@@ -6,19 +6,21 @@
 
 #IncludeRegexTransform: 
 
-D:/Programme/C/filesystem/filesystem/include/form.h
-
-D:/Programme/C/filesystem/filesystem/include/memory.h
-
-D:/Programme/C/filesystem/filesystem/memory.c
-include/form.h
-D:/Programme/C/filesystem/filesystem/include/form.h
-include/memory.h
-D:/Programme/C/filesystem/filesystem/include/memory.h
-stdlib.h
--
+D:/Programme/C/filesystem/filesystem/file.c
 stdio.h
 -
-string.h
+stdlib.h
 -
+include/file.h
+D:/Programme/C/filesystem/filesystem/include/file.h
+
+D:/Programme/C/filesystem/filesystem/include/file.h
+form.h
+D:/Programme/C/filesystem/filesystem/include/form.h
+mysys.h
+D:/Programme/C/filesystem/filesystem/include/mysys.h
+
+D:/Programme/C/filesystem/filesystem/include/form.h
+
+D:/Programme/C/filesystem/filesystem/include/mysys.h
 

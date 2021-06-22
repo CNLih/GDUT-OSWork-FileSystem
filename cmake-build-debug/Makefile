@@ -195,6 +195,33 @@ memory.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/memory.c.s
 .PHONY : memory.c.s
 
+mysys.obj: mysys.c.obj
+
+.PHONY : mysys.obj
+
+# target to build an object file
+mysys.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/mysys.c.obj
+.PHONY : mysys.c.obj
+
+mysys.i: mysys.c.i
+
+.PHONY : mysys.i
+
+# target to preprocess a source file
+mysys.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/mysys.c.i
+.PHONY : mysys.c.i
+
+mysys.s: mysys.c.s
+
+.PHONY : mysys.s
+
+# target to generate assembly for a file
+mysys.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/mysys.c.s
+.PHONY : mysys.c.s
+
 util/form.obj: util/form.c.obj
 
 .PHONY : util/form.obj
@@ -237,6 +264,9 @@ help:
 	@echo ... memory.obj
 	@echo ... memory.i
 	@echo ... memory.s
+	@echo ... mysys.obj
+	@echo ... mysys.i
+	@echo ... mysys.s
 	@echo ... util/form.obj
 	@echo ... util/form.i
 	@echo ... util/form.s
