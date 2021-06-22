@@ -12,8 +12,6 @@
 #include <stdlib.h>
 #include "include/file.h"
 
-extern int LoadDiscSize;
-
 typedef struct{
     int id;
     int linkedN;
@@ -34,7 +32,6 @@ void myFileDestroy(void *data){
  */
 void newInode(int usingDisc){
     loadedInode[usingDisc] = formInit(&myFileDestroy, EACH_DISC_MAX_FILES);
-    LoadInodeSize ++;
 }
 
 /**
@@ -42,20 +39,19 @@ void newInode(int usingDisc){
  * @param usingDisc
  * @param id
  * @param fileSize
- * @param blockSize
  * @param startBlock
  * @return
  */
-int newFile(int usingDisc, int id, int fileSize, int blockSize, int startBlock){
+int newFile(int usingDisc, int id, int fileSize, int startBlock) {
     int newIndex = loadedInode[usingDisc]->size ++;
     if(newIndex == EACH_DISC_MAX_FILES){
         return -1;
     }
     inodeItem *newItem = (inodeItem *) malloc(sizeof(inodeItem));
-    newItem->blockSize = blockSize;
+    newItem->blockSize = (fileSize + EACH_BLOCK_SIZE - 1) / EACH_BLOCK_SIZE;
     newItem->fileSize = fileSize;
     newItem->id = id;
-    newItem->linkedN = 0;
+    newItem->linkedN = 1;
     newItem->startBlock = startBlock;
 
     loadedInode[usingDisc]->head[newIndex] = newItem;
@@ -66,9 +62,9 @@ int newFile(int usingDisc, int id, int fileSize, int blockSize, int startBlock){
  * 将inode表写入fp文件中
  * @param fp 存放于该文件中
  */
-void writeInode(FILE *fp){
-    fprintf(fp, "%d ", LoadInodeSize);
-    for(int i = 0; i < LoadInodeSize; i ++){
+void saveInode(FILE *fp){
+    fprintf(fp, "%d ", LoadDiscSize);
+    for(int i = 0; i < LoadDiscSize; i ++){
         fprintf(fp, "%d ", loadedInode[i]->size);
         for(int j = 0; j < loadedInode[i]->size; j ++){
             fprintf(fp, "%d %d %d %d %d  ",
@@ -86,8 +82,7 @@ void writeInode(FILE *fp){
  * @param fp 存放于该文件中
  */
 void readInode(FILE *fp){
-    fscanf(fp, "%d ", &LoadInodeSize);
-    for(int i = 0; i < LoadInodeSize; i ++){
+    for(int i = 0; i < LoadDiscSize; i ++){
         loadedInode[i] = formInit(&myFileDestroy, EACH_DISC_MAX_FILES);
         fscanf(fp, "%d ", &loadedInode[i]->size);
         for(int j = 0; j < loadedInode[i]->size; j ++){
@@ -110,7 +105,7 @@ void readInode(FILE *fp){
  * 打印inode表
  */
 void debugInodeInfo(){
-    for(int i = 0; i < LoadInodeSize; i ++){
+    for(int i = 0; i < LoadDiscSize; i ++){
         for(int j = 0; j < loadedInode[i]->size; j ++){
             printf("id:%d", ((inodeItem *)loadedInode[i]->head[j])->id);
             printf(" linkedN:%d", ((inodeItem *)loadedInode[i]->head[j])->linkedN);
@@ -119,22 +114,4 @@ void debugInodeInfo(){
             printf("\n");
         }
     }
-}
-
-void testFile(){
-    newInode(0);
-    newFile(0, 1, 65, 2, 2);
-    newFile(0, 2, 65, 2, 1);
-    newFile(0, 3, 65, 2, 0);
-    debugInodeInfo();
-    FILE *fp = fopen("test.txt", "w+");
-    writeInode(fp);
-    fclose(fp);
-}
-
-void testRead(){
-    FILE *fp = fopen("test.txt", "r");
-    readInode(fp);
-    debugInodeInfo();
-    fclose(fp);
 }

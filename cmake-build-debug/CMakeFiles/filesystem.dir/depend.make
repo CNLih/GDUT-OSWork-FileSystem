@@ -4,12 +4,19 @@
 CMakeFiles/filesystem.dir/file.c.obj: ../file.c
 CMakeFiles/filesystem.dir/file.c.obj: ../include/file.h
 CMakeFiles/filesystem.dir/file.c.obj: ../include/form.h
+CMakeFiles/filesystem.dir/file.c.obj: ../include/memory.h
 CMakeFiles/filesystem.dir/file.c.obj: ../include/mysys.h
 
 CMakeFiles/filesystem.dir/memory.c.obj: ../include/form.h
 CMakeFiles/filesystem.dir/memory.c.obj: ../include/memory.h
 CMakeFiles/filesystem.dir/memory.c.obj: ../include/mysys.h
 CMakeFiles/filesystem.dir/memory.c.obj: ../memory.c
+
+CMakeFiles/filesystem.dir/mysys.c.obj: ../include/file.h
+CMakeFiles/filesystem.dir/mysys.c.obj: ../include/form.h
+CMakeFiles/filesystem.dir/mysys.c.obj: ../include/memory.h
+CMakeFiles/filesystem.dir/mysys.c.obj: ../include/mysys.h
+CMakeFiles/filesystem.dir/mysys.c.obj: ../mysys.c
 
 CMakeFiles/filesystem.dir/util/form.c.obj: ../include/form.h
 CMakeFiles/filesystem.dir/util/form.c.obj: ../util/form.c

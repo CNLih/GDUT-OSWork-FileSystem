@@ -13,40 +13,32 @@
 #include "include/memory.h"
 #include "include/mysys.h"
 
-typedef struct discType{
-    char *DiscName;
-    form *BlockForm;
-    int MaxBlockSize;
-    fpos_t off;       //磁盘空间inode表的偏移量
-}discType;
-
-discType *loadedDisc[MAX_LOAD_DISC];
+extern discType *loadedDisc[MAX_LOAD_DISC];
 
 void myDestroy(void *data){
     free(data);
 }
 
-void initBlocks(int maxSize, const char *name){
-    loadedDisc[LoadDiscSize] = (discType *)malloc(sizeof(discType));
-    loadedDisc[LoadDiscSize]->MaxBlockSize = maxSize;
-    loadedDisc[LoadDiscSize]->DiscName = (char *) malloc(sizeof(char) * MAX_NAME_SIZE);
-    memcpy(loadedDisc[LoadDiscSize]->DiscName, name, MAX_NAME_SIZE);
-    loadedDisc[LoadDiscSize]->BlockForm = formInit(myDestroy, maxSize);
+void initBlocks(int maxSize, const char *name, int freeIndex) {
+    loadedDisc[freeIndex] = (discType *)malloc(sizeof(discType));
+    loadedDisc[freeIndex]->MaxBlockSize = maxSize;
+    loadedDisc[freeIndex]->DiscName = (char *) malloc(sizeof(char) * MAX_NAME_SIZE);
+    memcpy(loadedDisc[freeIndex]->DiscName, name, MAX_NAME_SIZE);
+    loadedDisc[freeIndex]->BlockForm = formInit(myDestroy, maxSize);
 
     for(int i = 0; i < maxSize; i ++){
         int* data = (int *) malloc(sizeof(int));
         *data = -2;
-        loadedDisc[LoadDiscSize]->BlockForm->head[i] = data;
+        loadedDisc[freeIndex]->BlockForm->head[i] = data;
     }
-    LoadDiscSize ++;
 }
 
-#define addItem(i, data, index)         do{                    \
+#define addItem(i, data, index)         do{                                \
             *(int *)loadedDisc[i]->BlockForm->head[index] = data;          \
-            loadedDisc[i]->BlockForm->size ++;                             \
+            if(data != -2) loadedDisc[i]->BlockForm->size ++;              \
         }while(0)
 
-#define removeItem(i, index)         do{                       \
+#define removeItem(i, index)         do{                                   \
             *(int *)loadedDisc[i]->BlockForm->head[index] = -2;            \
             loadedDisc[i]->BlockForm->size --;                             \
         }while(0)
@@ -82,98 +74,84 @@ void traverseBlocks(const void *data, int num){
     }
 }
 
-void discLoadStore(){
-    FILE *fp;
-    fp = fopen(SYS_DISC, "w+");
+/**
+ * 保存位视图
+ * @param fp  要保存的磁盘文件
+ * @param index 保存到哪个盘号
+ */
+void discLoadSave(FILE *fp, int index) {
+//    fp = fopen(SYS_DISC, "w+");
+//
+//    fprintf(fp, "%d  ", LoadDiscSize);      //登记已经加载到挂载的磁盘
+//    for(int i = 0; i < LoadDiscSize; i ++){
+        fprintf(fp, "%24s  ", loadedDisc[index]->DiscName);
+        fprintf(fp, "%d  ", loadedDisc[index]->BlockForm->maxSize);
 
-    fprintf(fp, "%d  ", LoadDiscSize);      //登记已经加载到挂载的磁盘
-    for(int i = 0; i < LoadDiscSize; i ++){
-        fprintf(fp, "%24s  ", loadedDisc[i]->DiscName);
-        fprintf(fp, "%d  ", loadedDisc[i]->BlockForm->maxSize);
-
-        for(int j = 0; j < loadedDisc[i]->BlockForm->maxSize; j ++){
-            fprintf(fp, "%d  ", *(int *)loadedDisc[i]->BlockForm->head[j]);
+        for(int j = 0; j < loadedDisc[index]->BlockForm->maxSize; j ++){
+            fprintf(fp, "%d  ", *(int *)loadedDisc[index]->BlockForm->head[j]);
         }
-    }
-
-    fclose(fp);
+//    }
+//
+//    fclose(fp);
 }
 
-/**
- * int discLoadRead() 应该在系统加载初始就调用
- * @return -1 没有装载的盘 1 正常
- */
-int discLoadRead(){
-    FILE *fp;
-    fp = fopen(SYS_DISC, "r");
 
-    if(fp == NULL){
-        return -1;
-    }
-    rewind(fp);
-    int loadingSize;
-    fscanf(fp, "%d  ", &loadingSize);    //读取已经加载到挂载的磁盘
-    for(int i = 0; i < loadingSize; i ++){
+/**
+ * 加载位视图
+ * @param fp  要加载的磁盘文件
+ * @param index 加载到哪个盘号
+ */
+void discLoadRead(FILE *fp, int index) {
+//    int loadingSize;
+//    fscanf(fp, "%d  ", &loadingSize);    //读取已经加载到挂载的磁盘
+//    for(int i = 0; i < loadingSize; i ++){
         char name[MAX_NAME_SIZE];
         int myBlockSize = 0;
         fscanf(fp, "%24s  ", name);
         fscanf(fp, "%d  ", &myBlockSize);
 
-        initBlocks(myBlockSize, name);
+        initBlocks(myBlockSize, name, index);
         int j = 0;
         for(int z = 0; z < myBlockSize; z ++){
             int num;
             fscanf(fp, "%d  ", &num);
-            addItem(i, num, z);
+            addItem(index, num, z);
             if(num != -2){
                 j ++;
             }
         }
-        loadedDisc[i]->BlockForm->size = j;
-    }
-
-    fclose(fp);
-    return 1;
+//        loadedDisc[i]->BlockForm->size = j;
+//    }
 }
 
-int initDisc(const char *name, int blockSize){
+/**
+ * 初始化磁盘文件（大小上）
+ * @param name
+ * @param blockSize
+ * @param index
+ */
+void initDisc(const char *name, int blockSize, int index) {
     char buf[EACH_BLOCK_SIZE] = {0};
-    FILE *fp = fopen(name, "wb");
+    FILE *fp = fopen(name, "w");
 
     fseek(fp, 0, SEEK_SET);
     int i;
-    for(i = 0; i < blockSize; i ++){
+    for(i = 0; i < blockSize; i ++) {
         fwrite(buf, EACH_BLOCK_SIZE, 1, fp);
     }
-    if(i == MAX_LOAD_DISC){
-        return -1;
-    }
-    initBlocks(blockSize, name);
+
+    initBlocks(blockSize, name, index);
 
     fclose(fp);
-
-    discLoadStore();
-
-    return 1;
 }
 
 /**
- * createDisc(const char *name, int size)
- * @param name 磁盘名
- * @param size 磁盘大小（byte）
- * @return -1 无法分配（用尽）  1 正常
- */
-int createDisc(const char *name, int size){
-    return initDisc(name, size / EACH_BLOCK_SIZE);
-}
-
-/**
- * char *readFile(const char* name, int startBlock)
+ * 从磁盘中读出文件信息
  * @param name 磁盘名
  * @param startBlock FAT 位视图的首个块
  * @return 整个文件的内容
  */
-char *readFile(const char* name, int startBlock){
+char *readFromMem(const char* name, int startBlock){
     char *buf;
     int i = 0;
     if(startBlock < 0){
@@ -192,7 +170,7 @@ char *readFile(const char* name, int startBlock){
         //传递给realloc的指针必须是先前通过malloc(), calloc(), 或realloc()分配的
         buf = (char *) realloc(buf, (i + 1) * EACH_BLOCK_SIZE);
         memset(buf + i * EACH_BLOCK_SIZE, 0, EACH_BLOCK_SIZE);
-        fseek(fp, startBlock * EACH_BLOCK_SIZE, SEEK_SET);
+        fseek(fp, startBlock * EACH_BLOCK_SIZE + BASE_OFF, SEEK_SET);
         fread(buf + i * EACH_BLOCK_SIZE, sizeof(char), EACH_BLOCK_SIZE, fp);
         i ++;
         if(getItem(blockNum, startBlock) == 0){
@@ -202,53 +180,48 @@ char *readFile(const char* name, int startBlock){
     }
 
     fclose(fp);
-
-    discLoadStore();   //更新FAT
-
     return buf;
 }
 
 /**
+ * 向磁盘中写入信息
  * @param size
  * @param content
  * @return 文件开始的物理块位置  -1分配失败
  */
-int writeFile(const char *name, int size, const char* content){
+int writeToMem(int index, int size, const char* content){
     int blockSize;
-    FILE *fp = fopen(name, "rb+");
     blockSize = (size + (EACH_BLOCK_SIZE - 1)) / EACH_BLOCK_SIZE;
 
-    int blockNum = findBlockIdByName(name);
+    FILE *fp;
+    fp = fopen(loadedDisc[index]->DiscName, "rb+");
 
-    if(loadedDisc[blockNum]->BlockForm->size + blockSize >= loadedDisc[blockNum]->MaxBlockSize){
+    if(loadedDisc[index]->BlockForm->size + blockSize >= loadedDisc[index]->MaxBlockSize){
         return -1;
     }
     int ret = -1, i = 0, pre = 0;
     for(int j = 0; j < blockSize; ){
-        if((*(int *)loadedDisc[blockNum]->BlockForm->head[i ++]) == -2){
+        if((*(int *)loadedDisc[index]->BlockForm->head[i ++]) == -2){
             if(ret == -1){
                 ret = i - 1;
                 pre = i - 1;
             }
-            fseek(fp, (i - 1) * EACH_BLOCK_SIZE, SEEK_SET);
+            fseek(fp, (i - 1) * EACH_BLOCK_SIZE + BASE_OFF, SEEK_SET);
             int len = strlen(content + j * EACH_BLOCK_SIZE);
             if(len < EACH_BLOCK_SIZE){
                 fwrite(content + j * EACH_BLOCK_SIZE, len, 1, fp);
             }else{
                 fwrite(content + j * EACH_BLOCK_SIZE, EACH_BLOCK_SIZE, 1, fp);
             }
-            addItem(blockNum, i - 1, pre);
+            addItem(index, i - 1, pre);
             pre = i - 1;
 
             j ++;
         }
     }
-    changeItem(blockNum, 0, pre);
+    changeItem(index, 0, pre);
 
     fclose(fp);
-
-    discLoadStore();
-
     return ret;
 }
 
@@ -261,38 +234,20 @@ void debugForm(const char *name){
     formTraverse(loadedDisc[findBlockIdByName(name)]->BlockForm, &traverseBlocks);
 }
 
-void testCreateDisc(){
-    createDisc("DISC", 6400);
-    createDisc("DISC2", 6400);
-}
-
 void testWriteRead(){
-    writeFile("DISC", 100, "liheng");
-    writeFile("DISC", 100, "lihengsdfsdfs");
-    writeFile("DISC", 100, "lihengsdfsdfsd");
+    writeToMem(0, 100, "liheng");
+    writeToMem(0, 100, "lihengsdfsdfs");
+    writeToMem(0, 100, "lihengsdfsdfsd");
 
-    printf("read: %s\n", readFile("DISC", 0));
-    printf("read: %s\n", readFile("DISC", 2));
-    printf("read: %s\n", readFile("DISC", 4));
+    printf("read: %s\n", readFromMem("DISC", 0));
+    printf("read: %s\n", readFromMem("DISC", 2));
+    printf("read: %s\n", readFromMem("DISC", 4));
 
-    writeFile("DISC2", 100, "lihengsdfsdfsdfsd");
-    writeFile("DISC2", 100, "lihengsdfsdfs");
-    writeFile("DISC2", 100, "lihengsdfsdfsd");
+    writeToMem(1, 100, "lihengsdfsdfsdfsd");
+    writeToMem(1, 100, "lihengsdfsdfs");
+    writeToMem(1, 100, "lihengsdfsdfsd");
 
-    printf("read: %s\n", readFile("DISC2", 0));
-    printf("read: %s\n", readFile("DISC2", 2));
-    printf("read: %s\n", readFile("DISC2", 4));
+    printf("read: %s\n", readFromMem("DISC2", 0));
+    printf("read: %s\n", readFromMem("DISC2", 2));
+    printf("read: %s\n", readFromMem("DISC2", 4));
 }
-
-void testReleaseFile(){
-    writeFile("DISC", 100, "release ed");
-    printf("before release read: %s\n", readFile("DISC", 0));
-    releaseFile("DISC", 0);
-    printf("after release read: %s\n", readFile("DISC", 0));
-    debugForm("DISC");
-}
-
-//int main(){
-//    discLoadRead();
-//    return 0;
-//}
