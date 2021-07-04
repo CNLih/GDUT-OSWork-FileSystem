@@ -7,7 +7,10 @@ set(CMAKE_DEPENDS_CHECK_C
   "D:/Programme/C/filesystem/filesystem/file.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/file.c.obj"
   "D:/Programme/C/filesystem/filesystem/memory.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/memory.c.obj"
   "D:/Programme/C/filesystem/filesystem/mysys.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/mysys.c.obj"
+  "D:/Programme/C/filesystem/filesystem/shell.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/shell.c.obj"
+  "D:/Programme/C/filesystem/filesystem/user.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/user.c.obj"
   "D:/Programme/C/filesystem/filesystem/util/form.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/util/form.c.obj"
+  "D:/Programme/C/filesystem/filesystem/util/tree.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/util/tree.c.obj"
   )
 set(CMAKE_C_COMPILER_ID "GNU")
 

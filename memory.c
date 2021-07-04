@@ -7,7 +7,6 @@
  * 测试：打印物理存储空间，写文件，读文件
  */
 #include <stdlib.h>
-#include <stdio.h>
 #include <string.h>
 #include "include/form.h"
 #include "include/memory.h"
@@ -160,7 +159,7 @@ char *readFromMem(const char* name, int startBlock){
 
     int blockNum = findBlockIdByName(name);
     if(getItem(blockNum, startBlock) == -2){
-        return NULL;
+        return "Empty";
     }
 
     FILE *fp = fopen(name, "r");
@@ -226,12 +225,12 @@ int writeToMem(int index, int size, const char* content){
 }
 
 /**
- * void debugForm(const char *name)
- * @param name 磁盘名
+ * void debugForm(int discID)
+ * @param discID 打印的磁盘id
  */
-void debugForm(const char *name){
-    printf("disc name: %s\n", name);
-    formTraverse(loadedDisc[findBlockIdByName(name)]->BlockForm, &traverseBlocks);
+void debugForm(int discID){
+    printf("disc name: %s\n", loadedDisc[discID]->DiscName);
+    formTraverse(loadedDisc[discID]->BlockForm, &traverseBlocks);
 }
 
 void testWriteRead(){
@@ -239,15 +238,15 @@ void testWriteRead(){
     writeToMem(0, 100, "lihengsdfsdfs");
     writeToMem(0, 100, "lihengsdfsdfsd");
 
-    printf("read: %s\n", readFromMem("DISC", 0));
-    printf("read: %s\n", readFromMem("DISC", 2));
-    printf("read: %s\n", readFromMem("DISC", 4));
+    printf("cmd_read: %s\n", readFromMem("DISC", 0));
+    printf("cmd_read: %s\n", readFromMem("DISC", 2));
+    printf("cmd_read: %s\n", readFromMem("DISC", 4));
 
     writeToMem(1, 100, "lihengsdfsdfsdfsd");
     writeToMem(1, 100, "lihengsdfsdfs");
     writeToMem(1, 100, "lihengsdfsdfsd");
 
-    printf("read: %s\n", readFromMem("DISC2", 0));
-    printf("read: %s\n", readFromMem("DISC2", 2));
-    printf("read: %s\n", readFromMem("DISC2", 4));
+    printf("cmd_read: %s\n", readFromMem("DISC2", 0));
+    printf("cmd_read: %s\n", readFromMem("DISC2", 2));
+    printf("cmd_read: %s\n", readFromMem("DISC2", 4));
 }

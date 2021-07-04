@@ -6,18 +6,44 @@ CMakeFiles/filesystem.dir/file.c.obj: ../include/file.h
 CMakeFiles/filesystem.dir/file.c.obj: ../include/form.h
 CMakeFiles/filesystem.dir/file.c.obj: ../include/memory.h
 CMakeFiles/filesystem.dir/file.c.obj: ../include/mysys.h
+CMakeFiles/filesystem.dir/file.c.obj: ../include/tree.h
 
+CMakeFiles/filesystem.dir/memory.c.obj: ../include/file.h
 CMakeFiles/filesystem.dir/memory.c.obj: ../include/form.h
 CMakeFiles/filesystem.dir/memory.c.obj: ../include/memory.h
 CMakeFiles/filesystem.dir/memory.c.obj: ../include/mysys.h
+CMakeFiles/filesystem.dir/memory.c.obj: ../include/tree.h
 CMakeFiles/filesystem.dir/memory.c.obj: ../memory.c
 
 CMakeFiles/filesystem.dir/mysys.c.obj: ../include/file.h
 CMakeFiles/filesystem.dir/mysys.c.obj: ../include/form.h
 CMakeFiles/filesystem.dir/mysys.c.obj: ../include/memory.h
 CMakeFiles/filesystem.dir/mysys.c.obj: ../include/mysys.h
+CMakeFiles/filesystem.dir/mysys.c.obj: ../include/shell.h
+CMakeFiles/filesystem.dir/mysys.c.obj: ../include/tree.h
+CMakeFiles/filesystem.dir/mysys.c.obj: ../include/user.h
 CMakeFiles/filesystem.dir/mysys.c.obj: ../mysys.c
+
+CMakeFiles/filesystem.dir/shell.c.obj: ../include/file.h
+CMakeFiles/filesystem.dir/shell.c.obj: ../include/form.h
+CMakeFiles/filesystem.dir/shell.c.obj: ../include/memory.h
+CMakeFiles/filesystem.dir/shell.c.obj: ../include/mysys.h
+CMakeFiles/filesystem.dir/shell.c.obj: ../include/shell.h
+CMakeFiles/filesystem.dir/shell.c.obj: ../include/tree.h
+CMakeFiles/filesystem.dir/shell.c.obj: ../shell.c
+
+CMakeFiles/filesystem.dir/user.c.obj: ../include/file.h
+CMakeFiles/filesystem.dir/user.c.obj: ../include/form.h
+CMakeFiles/filesystem.dir/user.c.obj: ../include/memory.h
+CMakeFiles/filesystem.dir/user.c.obj: ../include/mysys.h
+CMakeFiles/filesystem.dir/user.c.obj: ../include/tree.h
+CMakeFiles/filesystem.dir/user.c.obj: ../include/user.h
+CMakeFiles/filesystem.dir/user.c.obj: ../user.c
 
 CMakeFiles/filesystem.dir/util/form.c.obj: ../include/form.h
 CMakeFiles/filesystem.dir/util/form.c.obj: ../util/form.c
+
+CMakeFiles/filesystem.dir/util/tree.c.obj: ../include/form.h
+CMakeFiles/filesystem.dir/util/tree.c.obj: ../include/tree.h
+CMakeFiles/filesystem.dir/util/tree.c.obj: ../util/tree.c
 

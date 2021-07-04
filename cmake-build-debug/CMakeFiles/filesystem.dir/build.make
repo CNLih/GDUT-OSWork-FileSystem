@@ -127,12 +127,54 @@ CMakeFiles/filesystem.dir/mysys.c.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/filesystem.dir/mysys.c.s"
 	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\Programme\C\filesystem\filesystem\mysys.c -o CMakeFiles\filesystem.dir\mysys.c.s
 
+CMakeFiles/filesystem.dir/util/tree.c.obj: CMakeFiles/filesystem.dir/flags.make
+CMakeFiles/filesystem.dir/util/tree.c.obj: ../util/tree.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\Programme\C\filesystem\filesystem\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building C object CMakeFiles/filesystem.dir/util/tree.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\filesystem.dir\util\tree.c.obj -c D:\Programme\C\filesystem\filesystem\util\tree.c
+
+CMakeFiles/filesystem.dir/util/tree.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/filesystem.dir/util/tree.c.i"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E D:\Programme\C\filesystem\filesystem\util\tree.c > CMakeFiles\filesystem.dir\util\tree.c.i
+
+CMakeFiles/filesystem.dir/util/tree.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/filesystem.dir/util/tree.c.s"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\Programme\C\filesystem\filesystem\util\tree.c -o CMakeFiles\filesystem.dir\util\tree.c.s
+
+CMakeFiles/filesystem.dir/shell.c.obj: CMakeFiles/filesystem.dir/flags.make
+CMakeFiles/filesystem.dir/shell.c.obj: ../shell.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\Programme\C\filesystem\filesystem\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building C object CMakeFiles/filesystem.dir/shell.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\filesystem.dir\shell.c.obj -c D:\Programme\C\filesystem\filesystem\shell.c
+
+CMakeFiles/filesystem.dir/shell.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/filesystem.dir/shell.c.i"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E D:\Programme\C\filesystem\filesystem\shell.c > CMakeFiles\filesystem.dir\shell.c.i
+
+CMakeFiles/filesystem.dir/shell.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/filesystem.dir/shell.c.s"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\Programme\C\filesystem\filesystem\shell.c -o CMakeFiles\filesystem.dir\shell.c.s
+
+CMakeFiles/filesystem.dir/user.c.obj: CMakeFiles/filesystem.dir/flags.make
+CMakeFiles/filesystem.dir/user.c.obj: ../user.c
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=D:\Programme\C\filesystem\filesystem\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Building C object CMakeFiles/filesystem.dir/user.c.obj"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -o CMakeFiles\filesystem.dir\user.c.obj -c D:\Programme\C\filesystem\filesystem\user.c
+
+CMakeFiles/filesystem.dir/user.c.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing C source to CMakeFiles/filesystem.dir/user.c.i"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -E D:\Programme\C\filesystem\filesystem\user.c > CMakeFiles\filesystem.dir\user.c.i
+
+CMakeFiles/filesystem.dir/user.c.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling C source to assembly CMakeFiles/filesystem.dir/user.c.s"
+	C:\MinGW\bin\gcc.exe $(C_DEFINES) $(C_INCLUDES) $(C_FLAGS) -S D:\Programme\C\filesystem\filesystem\user.c -o CMakeFiles\filesystem.dir\user.c.s
+
 # Object files for target filesystem
 filesystem_OBJECTS = \
 "CMakeFiles/filesystem.dir/memory.c.obj" \
 "CMakeFiles/filesystem.dir/util/form.c.obj" \
 "CMakeFiles/filesystem.dir/file.c.obj" \
-"CMakeFiles/filesystem.dir/mysys.c.obj"
+"CMakeFiles/filesystem.dir/mysys.c.obj" \
+"CMakeFiles/filesystem.dir/util/tree.c.obj" \
+"CMakeFiles/filesystem.dir/shell.c.obj" \
+"CMakeFiles/filesystem.dir/user.c.obj"
 
 # External object files for target filesystem
 filesystem_EXTERNAL_OBJECTS =
@@ -141,11 +183,14 @@ filesystem.exe: CMakeFiles/filesystem.dir/memory.c.obj
 filesystem.exe: CMakeFiles/filesystem.dir/util/form.c.obj
 filesystem.exe: CMakeFiles/filesystem.dir/file.c.obj
 filesystem.exe: CMakeFiles/filesystem.dir/mysys.c.obj
+filesystem.exe: CMakeFiles/filesystem.dir/util/tree.c.obj
+filesystem.exe: CMakeFiles/filesystem.dir/shell.c.obj
+filesystem.exe: CMakeFiles/filesystem.dir/user.c.obj
 filesystem.exe: CMakeFiles/filesystem.dir/build.make
 filesystem.exe: CMakeFiles/filesystem.dir/linklibs.rsp
 filesystem.exe: CMakeFiles/filesystem.dir/objects1.rsp
 filesystem.exe: CMakeFiles/filesystem.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:\Programme\C\filesystem\filesystem\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Linking C executable filesystem.exe"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=D:\Programme\C\filesystem\filesystem\cmake-build-debug\CMakeFiles --progress-num=$(CMAKE_PROGRESS_8) "Linking C executable filesystem.exe"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles\filesystem.dir\link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.

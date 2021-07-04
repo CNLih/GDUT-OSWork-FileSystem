@@ -89,13 +89,31 @@
 		<Unit filename="D:/Programme/C/filesystem/filesystem/include/mysys.h">
 			<Option target="filesystem"/>
 		</Unit>
+		<Unit filename="D:/Programme/C/filesystem/filesystem/include/shell.h">
+			<Option target="filesystem"/>
+		</Unit>
+		<Unit filename="D:/Programme/C/filesystem/filesystem/include/tree.h">
+			<Option target="filesystem"/>
+		</Unit>
+		<Unit filename="D:/Programme/C/filesystem/filesystem/include/user.h">
+			<Option target="filesystem"/>
+		</Unit>
 		<Unit filename="D:/Programme/C/filesystem/filesystem/memory.c">
 			<Option target="filesystem"/>
 		</Unit>
 		<Unit filename="D:/Programme/C/filesystem/filesystem/mysys.c">
 			<Option target="filesystem"/>
 		</Unit>
+		<Unit filename="D:/Programme/C/filesystem/filesystem/shell.c">
+			<Option target="filesystem"/>
+		</Unit>
+		<Unit filename="D:/Programme/C/filesystem/filesystem/user.c">
+			<Option target="filesystem"/>
+		</Unit>
 		<Unit filename="D:/Programme/C/filesystem/filesystem/util/form.c">
+			<Option target="filesystem"/>
+		</Unit>
+		<Unit filename="D:/Programme/C/filesystem/filesystem/util/tree.c">
 			<Option target="filesystem"/>
 		</Unit>
 		<Unit filename="D:/Programme/C/filesystem/filesystem/CMakeLists.txt">

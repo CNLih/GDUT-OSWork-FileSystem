@@ -11,6 +11,7 @@
 #define BASE_OFF              5120          //磁盘空间inode表的偏移量
 
 #include "form.h"
+#include <stdio.h>
 
 typedef struct discType{
     char *DiscName;
@@ -28,6 +29,6 @@ char *readFromMem(const char* name, int startBlock);
 
 int writeToMem(int index, int size, const char* content);
 
-void debugForm(const char *name);
+void debugForm(int discID);
 
 #endif //FILESYSTEM_MEMORY_H

@@ -222,6 +222,60 @@ mysys.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/mysys.c.s
 .PHONY : mysys.c.s
 
+shell.obj: shell.c.obj
+
+.PHONY : shell.obj
+
+# target to build an object file
+shell.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/shell.c.obj
+.PHONY : shell.c.obj
+
+shell.i: shell.c.i
+
+.PHONY : shell.i
+
+# target to preprocess a source file
+shell.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/shell.c.i
+.PHONY : shell.c.i
+
+shell.s: shell.c.s
+
+.PHONY : shell.s
+
+# target to generate assembly for a file
+shell.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/shell.c.s
+.PHONY : shell.c.s
+
+user.obj: user.c.obj
+
+.PHONY : user.obj
+
+# target to build an object file
+user.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/user.c.obj
+.PHONY : user.c.obj
+
+user.i: user.c.i
+
+.PHONY : user.i
+
+# target to preprocess a source file
+user.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/user.c.i
+.PHONY : user.c.i
+
+user.s: user.c.s
+
+.PHONY : user.s
+
+# target to generate assembly for a file
+user.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/user.c.s
+.PHONY : user.c.s
+
 util/form.obj: util/form.c.obj
 
 .PHONY : util/form.obj
@@ -249,6 +303,33 @@ util/form.c.s:
 	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/util/form.c.s
 .PHONY : util/form.c.s
 
+util/tree.obj: util/tree.c.obj
+
+.PHONY : util/tree.obj
+
+# target to build an object file
+util/tree.c.obj:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/util/tree.c.obj
+.PHONY : util/tree.c.obj
+
+util/tree.i: util/tree.c.i
+
+.PHONY : util/tree.i
+
+# target to preprocess a source file
+util/tree.c.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/util/tree.c.i
+.PHONY : util/tree.c.i
+
+util/tree.s: util/tree.c.s
+
+.PHONY : util/tree.s
+
+# target to generate assembly for a file
+util/tree.c.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles\filesystem.dir\build.make CMakeFiles/filesystem.dir/util/tree.c.s
+.PHONY : util/tree.c.s
+
 # Help Target
 help:
 	@echo The following are some of the valid targets for this Makefile:
@@ -267,9 +348,18 @@ help:
 	@echo ... mysys.obj
 	@echo ... mysys.i
 	@echo ... mysys.s
+	@echo ... shell.obj
+	@echo ... shell.i
+	@echo ... shell.s
+	@echo ... user.obj
+	@echo ... user.i
+	@echo ... user.s
 	@echo ... util/form.obj
 	@echo ... util/form.i
 	@echo ... util/form.s
+	@echo ... util/tree.obj
+	@echo ... util/tree.i
+	@echo ... util/tree.s
 .PHONY : help
 
 

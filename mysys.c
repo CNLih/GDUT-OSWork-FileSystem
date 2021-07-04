@@ -4,8 +4,11 @@
 
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #include "include/mysys.h"
 #include "include/file.h"
+#include "include/shell.h"
+#include "include/user.h"
 
 void saveDisc(){
     FILE *fp;
@@ -25,7 +28,9 @@ void saveDisc(){
             //保存物理块使用情况
             discLoadSave(disc, i);
             //保存inode表
-            saveInode(disc);
+            saveInode(disc, i);
+            //保存目录结构
+            savePath(disc, i);
             fclose(disc);
             saveN --;
         }
@@ -33,6 +38,7 @@ void saveDisc(){
             break;
         }
     }
+    saveUser(fp);
     fclose(fp);
 }
 
@@ -58,7 +64,9 @@ int createDisc(const char *name, int size){
     initDisc(name, size, i);
     newInode(i);
     LoadDiscSize ++;
+    //重新加载磁盘
     saveDisc();
+    loadDisc();
     return 1;
 }
 
@@ -69,30 +77,42 @@ int createDisc(const char *name, int size){
 int loadDisc(){
     FILE *fp;
     fp = fopen(SYS_DISC, "r");
-    int n;
+    int n = 0;
 
+    sysParaInit();
     if(fp == NULL){
         return -1;  //无配置文件
     }
-    fscanf(fp, "%d ", &n);
+    if(fscanf(fp, "%d ", &n) == EOF || n == 0){
+        return -1;  //无配置文件
+    }
+
     for(int i = 0; i < n; i ++){
         char buf[MAX_NAME_SIZE];
         fscanf(fp, "%24s ", buf);
-
-        newInode(i);
-        LoadDiscSize ++;
 
         FILE *disc = fopen(buf, "r");
         if(disc == NULL){
             return -2;  //无磁盘文件
         }
+        newInode(i);
+        LoadDiscSize ++;
         //读取物理块使用情况
         discLoadRead(disc, i);
         //读取inode表
-        readInode(disc);
+        readInode(disc, i);
+        //读取目录信息
+        readPath(disc, i);
         fclose(disc);
     }
+
+    readUser(fp);
     fclose(fp);
+
+    if(workingDisc == -1){
+        workingDisc = 0;
+        useDisc(workingDisc);
+    }
     return 1;
 }
 
@@ -102,28 +122,95 @@ int loadDisc(){
  * @param size 期望文件的大小
  * @param content
  */
-void writeFile(int index, int size, const char* content){
+void writeFile(const char *name, int index, int size, const char *content, int pri) {
     //向磁盘中写入文件
     int begN = writeToMem(index, size, content);
     //文件写入inode表
-    newInode(0);
-    newFile(index, 0, sizeof(content), begN);
+    int id = workingPlace[index].maxId + 1;
+    newFile(index, id, size, begN, name, pri);
+    workingPlace[index].maxId ++;
+    //写入目录中
+    addFileNode(id, index);
     saveDisc();
+}
+
+/**
+ * 登录或者切换用户
+ * @param name
+ * @param password
+ * @return -1 -- Error pass    -2 -- No found
+ */
+int login(const char *name, const char *password){
+    for(int i = 0; i < usersN; i ++){
+        if(strcmp(users[i], name) == 0){
+            if(strcmp(pass[i], password) == 0){
+                CurUserId = users_id[i];
+                strcpy(CurUserName, users[i]);
+                return 1;
+            }
+            return -1;
+        }
+    }
+    return -2;
 }
 
 void sysParaInit(){
     LoadDiscSize = 0;
+    for(int i = 0; i < MAX_LOAD_DISC; i ++){
+        if(loadedDisc[i] != NULL){
+            loadedDisc[i]->BlockForm->destroy(loadedDisc[i]->BlockForm->head);
+            free(loadedDisc[i]->BlockForm);
+        }
+
+        //printf("debug\n");
+        //在run的时候第一次会出现错误 只会打印一个debug
+
+        if(loadedInode[i] != NULL){
+            loadedInode[i]->destroy(loadedInode[i]->head);
+            free(loadedInode[i]);
+        }
+
+        //在run的时候第一次会出现错误
+        //printf("debug\n");
+
+        workingPlace[i].childFile = NULL;
+        workingPlace[i].childNum = 0;
+        workingPlace[i].maxId = 0;
+    }
     memset(loadedDisc, 0, sizeof(loadedDisc));
+    workingDisc = -1;
+}
+
+/**
+ * 更新全局变量workingPlace中的childFile（存储子文件id）
+ * @param index
+ */
+void updateChildFile(int index){
+    for(int i = 0; i < workingPlace->childNum; i ++){
+        free(workingPlace->childFile[i]);
+    }
+    int *childIds = getChildId(workingPlace[index].cur, &workingPlace[index].childNum);
+    workingPlace[index].childFile = (inodeItem **) malloc(sizeof(inodeItem *) * workingPlace[index].childNum);
+    for(int i = 0; i < workingPlace[index].childNum; i ++){
+        workingPlace[index].childFile[i] = getFileById(index, childIds[i]);
+    }
+}
+
+void useDisc(int index){
+    workingDisc = index;
+    updateChildFile(workingDisc);
+    memcpy(workingPlace[workingDisc].curFolder, loadedDisc[workingDisc]->DiscName, MAX_NAME_SIZE);
+    strcpy(workingDir, loadedDisc[workingDisc]->DiscName);
+    strcpy(workingDir + strlen(workingDir), ":");
 }
 
 int main(){
+    printf("Welcome To My File System\n");
     sysParaInit();
-//    createDisc("DISC_A", 100);
-//    saveDisc();
-    loadDisc();
-    writeFile(0, 100, "liheng");
-    debugForm("DISC_A");
-    printf("read: %s\n", readFromMem("DISC_A", 0));
-    printf("read: %s\n", readFromMem("DISC_A", 2));
-    printf("read: %s\n", readFromMem("DISC_A", 4));
+    userPreInit();
+    if(loadDisc() != -1){
+        workingDisc = 0;
+        useDisc(workingDisc);
+    }
+    shellRun();
 }
