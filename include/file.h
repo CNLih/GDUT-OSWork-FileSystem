@@ -6,20 +6,38 @@
 #define FILESYSTEM_FILE_H
 
 #include "form.h"
-#include "mysys.h"
 
 #define EACH_DISC_MAX_FILES       100
 
-form *loadedInode[MAX_LOAD_DISC];
+//inode项
+typedef struct{
+    int id;
+    char *name;
+    int fileSize;
+    int blockSize;
+    int startBlock;
+    int ownerId;
+    int privilege;
+}inodeItem;
 
 void newInode(int usingDisc);
 
-int newFile(int usingDisc, int id, int fileSize, int startBlock);
+int newFile(int usingDisc, int id, int fileSize, int startBlock, const char *name, int pri);
 
-void saveInode(FILE *fp);
+void saveInode(FILE *fp, int index);
 
-void readInode(FILE *fp);
+void readInode(FILE *fp, int index);
 
 void debugInodeInfo();
+
+void addFileNode(int id, int index);
+
+void readPath(FILE *fp, int index);
+
+void savePath(FILE *fp, int index);
+
+void showChildDir(int index);
+
+inodeItem *getFileById(int index, int id);
 
 #endif //FILESYSTEM_FILE_H
