@@ -5,9 +5,9 @@
 #ifndef FILESYSTEM_SHELL_H
 #define FILESYSTEM_SHELL_H
 
-#define FUNC_NUM  11
+#define FUNC_NUM  13
 
-char workingDir[128];
+extern char workingDir[128];
 
 void cmd_ls(int fun);
 

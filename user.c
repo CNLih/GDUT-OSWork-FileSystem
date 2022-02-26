@@ -8,6 +8,13 @@
 #include "include/user.h"
 #include "include/mysys.h"
 
+char **users;
+char **pass;
+int *users_id;
+
+int usersN;
+int maxUserId;
+
 /**
  * 从配置文件读取用户信息
  * @param fp

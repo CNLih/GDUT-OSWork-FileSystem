@@ -9,17 +9,12 @@
 #define MAX_PASS_SIZE   24
 #define MAX_USER_N      99
 
-typedef struct {
-    int ownerId;
-    int pri;    //7 - w/r/e
-}pri_info;
+extern char **users;
+extern char **pass;
+extern int *users_id;
 
-char **users;
-char **pass;
-int *users_id;
-
-int usersN;
-int maxUserId;
+extern int usersN;
+extern int maxUserId;
 
 void readUser(FILE *fp);
 

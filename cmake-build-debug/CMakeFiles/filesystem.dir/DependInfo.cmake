@@ -1,21 +1,20 @@
+
+# Consider dependencies only in project.
+set(CMAKE_DEPENDS_IN_PROJECT_ONLY OFF)
+
 # The set of languages for which implicit dependencies are needed:
 set(CMAKE_DEPENDS_LANGUAGES
-  "C"
   )
-# The set of files for implicit dependencies of each language:
-set(CMAKE_DEPENDS_CHECK_C
-  "D:/Programme/C/filesystem/filesystem/file.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/file.c.obj"
-  "D:/Programme/C/filesystem/filesystem/memory.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/memory.c.obj"
-  "D:/Programme/C/filesystem/filesystem/mysys.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/mysys.c.obj"
-  "D:/Programme/C/filesystem/filesystem/shell.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/shell.c.obj"
-  "D:/Programme/C/filesystem/filesystem/user.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/user.c.obj"
-  "D:/Programme/C/filesystem/filesystem/util/form.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/util/form.c.obj"
-  "D:/Programme/C/filesystem/filesystem/util/tree.c" "D:/Programme/C/filesystem/filesystem/cmake-build-debug/CMakeFiles/filesystem.dir/util/tree.c.obj"
-  )
-set(CMAKE_C_COMPILER_ID "GNU")
 
-# The include file search paths:
-set(CMAKE_C_TARGET_INCLUDE_PATH
+# The set of dependency files which are needed:
+set(CMAKE_DEPENDS_DEPENDENCY_FILES
+  "D:/Program/C/filesystem/file.c" "CMakeFiles/filesystem.dir/file.c.obj" "gcc" "CMakeFiles/filesystem.dir/file.c.obj.d"
+  "D:/Program/C/filesystem/memory.c" "CMakeFiles/filesystem.dir/memory.c.obj" "gcc" "CMakeFiles/filesystem.dir/memory.c.obj.d"
+  "D:/Program/C/filesystem/mysys.c" "CMakeFiles/filesystem.dir/mysys.c.obj" "gcc" "CMakeFiles/filesystem.dir/mysys.c.obj.d"
+  "D:/Program/C/filesystem/shell.c" "CMakeFiles/filesystem.dir/shell.c.obj" "gcc" "CMakeFiles/filesystem.dir/shell.c.obj.d"
+  "D:/Program/C/filesystem/user.c" "CMakeFiles/filesystem.dir/user.c.obj" "gcc" "CMakeFiles/filesystem.dir/user.c.obj.d"
+  "D:/Program/C/filesystem/util/form.c" "CMakeFiles/filesystem.dir/util/form.c.obj" "gcc" "CMakeFiles/filesystem.dir/util/form.c.obj.d"
+  "D:/Program/C/filesystem/util/tree.c" "CMakeFiles/filesystem.dir/util/tree.c.obj" "gcc" "CMakeFiles/filesystem.dir/util/tree.c.obj.d"
   )
 
 # Targets to which this target links.

@@ -10,6 +10,24 @@
 #include "include/shell.h"
 #include "include/user.h"
 
+//已经加载的磁盘数
+int LoadDiscSize;
+
+//加载的inode表
+form *loadedInode[MAX_LOAD_DISC];
+
+//磁盘挂载处
+discType *loadedDisc[MAX_LOAD_DISC];
+
+//磁盘基本路径
+workPlace workingPlace[MAX_LOAD_DISC];
+
+//当前登录的用户
+int CurUserId;
+char CurUserName[MAX_USER_SIZE];
+
+int workingDisc;
+
 void saveDisc(){
     FILE *fp;
     fp = fopen(SYS_DISC, "w");
@@ -18,10 +36,6 @@ void saveDisc(){
     int i = 0, saveN = LoadDiscSize;
     fprintf(fp, "%d ", LoadDiscSize);
     while(saveN){
-        if(i == 10){
-            printf("bug? LoadDiscSize与实际不符\n");
-            return ;
-        }
         if(loadedDisc[i] != NULL){
             fprintf(fp, "%24s ", loadedDisc[i]->DiscName);
             FILE *disc = fopen(loadedDisc[i]->DiscName, "rb+");
@@ -32,6 +46,29 @@ void saveDisc(){
             //保存目录结构
             savePath(disc, i);
             fclose(disc);
+            saveN --;
+        }
+        if(i ++ == LoadDiscSize){
+            break;
+        }
+    }
+    saveUser(fp);
+    fclose(fp);
+}
+
+/**
+ * 单独SYS_DISC
+ */
+void updateConfig(){
+    FILE *fp;
+    fp = fopen(SYS_DISC, "w");
+
+    //考虑到可能卸载磁盘：
+    int i = 0, saveN = LoadDiscSize;
+    fprintf(fp, "%d ", LoadDiscSize);
+    while(saveN){
+        if(loadedDisc[i] != NULL){
+            fprintf(fp, "%24s ", loadedDisc[i]->DiscName);
             saveN --;
         }
         if(i ++ == LoadDiscSize){
@@ -72,7 +109,7 @@ int createDisc(const char *name, int size){
 
 /**
  * 加载磁盘
- * @return -1配置文件 -2无磁盘文件 1正常
+ * @return -1配置文件 1正常
  */
 int loadDisc(){
     FILE *fp;
@@ -93,7 +130,7 @@ int loadDisc(){
 
         FILE *disc = fopen(buf, "r");
         if(disc == NULL){
-            return -2;  //无磁盘文件
+            continue;  //无磁盘文件
         }
         newInode(i);
         LoadDiscSize ++;
@@ -105,12 +142,19 @@ int loadDisc(){
         readPath(disc, i);
         fclose(disc);
     }
+    if(LoadDiscSize == 0){
+        return -1;
+    }
 
     readUser(fp);
     fclose(fp);
 
     if(workingDisc == -1){
-        workingDisc = 0;
+        for(int i = 0; i < n; i ++){
+            if(loadedDisc[i] != NULL){
+                workingDisc = i;
+            }
+        }
         useDisc(workingDisc);
     }
     return 1;
@@ -162,16 +206,12 @@ void sysParaInit(){
             free(loadedDisc[i]->BlockForm);
         }
 
-        //printf("debug\n");
-        //在run的时候第一次会出现错误 只会打印一个debug
-
         if(loadedInode[i] != NULL){
-            loadedInode[i]->destroy(loadedInode[i]->head);
-            free(loadedInode[i]);
+            if(loadedInode[i]->head != NULL){
+                loadedInode[i]->destroy(loadedInode[i]);
+                free(loadedInode[i]);
+            }
         }
-
-        //在run的时候第一次会出现错误
-        //printf("debug\n");
 
         workingPlace[i].childFile = NULL;
         workingPlace[i].childNum = 0;
@@ -208,9 +248,6 @@ int main(){
     printf("Welcome To My File System\n");
     sysParaInit();
     userPreInit();
-    if(loadDisc() != -1){
-        workingDisc = 0;
-        useDisc(workingDisc);
-    }
+    loadDisc();
     shellRun();
 }

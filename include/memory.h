@@ -25,7 +25,7 @@ void discLoadRead(FILE *fp, int index);
 
 void discLoadSave(FILE *fp, int index);
 
-char *readFromMem(const char* name, int startBlock);
+char *readFromMem(int blockId, int startBlock);
 
 int writeToMem(int index, int size, const char* content);
 

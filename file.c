@@ -14,9 +14,8 @@
 #include "include/file.h"
 #include "include/mysys.h"
 
-void myFileDestroy(void *data){
-    free(((inodeItem *)data)->name);
-    free(data);
+void myFormDestroy(void *data){
+    free(((form *)data)->head);
 }
 
 void treeDestroy(void *data){
@@ -33,7 +32,7 @@ void treePrint(const void *data){
  * @param usingDisc
  */
 void newInode(int usingDisc){
-    loadedInode[usingDisc] = formInit(&myFileDestroy, EACH_DISC_MAX_FILES);
+    loadedInode[usingDisc] = formInit(&myFormDestroy, EACH_DISC_MAX_FILES);
 }
 
 /**
@@ -92,7 +91,7 @@ void saveInode(FILE *fp, int index) {
  */
 void readInode(FILE *fp, int index) {
 //    for(int i = 0; i < LoadDiscSize; i ++){
-        loadedInode[index] = formInit(&myFileDestroy, EACH_DISC_MAX_FILES);
+        loadedInode[index] = formInit(&myFormDestroy, EACH_DISC_MAX_FILES);
         fscanf(fp, "%d %d ", &loadedInode[index]->size, &workingPlace[index].maxId);
         for(int j = 0; j < loadedInode[index]->size; j ++){
             inodeItem *newItem = (inodeItem *) malloc(sizeof(inodeItem));

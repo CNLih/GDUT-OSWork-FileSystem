@@ -68,9 +68,10 @@ void releaseFile(const char* name, int index){
 }
 
 void traverseBlocks(const void *data, int num){
-    if(*(int *)data != -2){
-        printf("ID:%d Next:%d\n", num, *(int *)data);
+    if(num != 0 && num % 6 == 0){
+        printf("\n");
     }
+    printf("ID:%-3d Next:%-3d  ", num, *(int *)data);
 }
 
 /**
@@ -146,23 +147,22 @@ void initDisc(const char *name, int blockSize, int index) {
 
 /**
  * 从磁盘中读出文件信息
- * @param name 磁盘名
+ * @param blockNum 磁盘id
  * @param startBlock FAT 位视图的首个块
  * @return 整个文件的内容
  */
-char *readFromMem(const char* name, int startBlock){
+char *readFromMem(int blockId, int startBlock){
     char *buf;
     int i = 0;
     if(startBlock < 0){
         return NULL;
     }
 
-    int blockNum = findBlockIdByName(name);
-    if(getItem(blockNum, startBlock) == -2){
+    if(getItem(blockId, startBlock) == -2){
         return "Empty";
     }
 
-    FILE *fp = fopen(name, "r");
+    FILE *fp = fopen(loadedDisc[blockId]->DiscName, "r");
 
     buf = (char *)malloc(sizeof(char) * EACH_BLOCK_SIZE);
     while(1){
@@ -172,10 +172,10 @@ char *readFromMem(const char* name, int startBlock){
         fseek(fp, startBlock * EACH_BLOCK_SIZE + BASE_OFF, SEEK_SET);
         fread(buf + i * EACH_BLOCK_SIZE, sizeof(char), EACH_BLOCK_SIZE, fp);
         i ++;
-        if(getItem(blockNum, startBlock) == 0){
+        if(getItem(blockId, startBlock) == 0){
             break;
         }
-        startBlock = getItem(blockNum, startBlock);
+        startBlock = getItem(blockId, startBlock);
     }
 
     fclose(fp);
@@ -191,6 +191,9 @@ char *readFromMem(const char* name, int startBlock){
 int writeToMem(int index, int size, const char* content){
     int blockSize;
     blockSize = (size + (EACH_BLOCK_SIZE - 1)) / EACH_BLOCK_SIZE;
+    if(blockSize == 0){
+        return 0;    //大小为0的默认挂载到0块
+    }
 
     FILE *fp;
     fp = fopen(loadedDisc[index]->DiscName, "rb+");
@@ -230,23 +233,25 @@ int writeToMem(int index, int size, const char* content){
  */
 void debugForm(int discID){
     printf("disc name: %s\n", loadedDisc[discID]->DiscName);
+    printf("----------------------------------------------------\n");
     formTraverse(loadedDisc[discID]->BlockForm, &traverseBlocks);
+    printf("----------------------------------------------------\n");
 }
-
-void testWriteRead(){
-    writeToMem(0, 100, "liheng");
-    writeToMem(0, 100, "lihengsdfsdfs");
-    writeToMem(0, 100, "lihengsdfsdfsd");
-
-    printf("cmd_read: %s\n", readFromMem("DISC", 0));
-    printf("cmd_read: %s\n", readFromMem("DISC", 2));
-    printf("cmd_read: %s\n", readFromMem("DISC", 4));
-
-    writeToMem(1, 100, "lihengsdfsdfsdfsd");
-    writeToMem(1, 100, "lihengsdfsdfs");
-    writeToMem(1, 100, "lihengsdfsdfsd");
-
-    printf("cmd_read: %s\n", readFromMem("DISC2", 0));
-    printf("cmd_read: %s\n", readFromMem("DISC2", 2));
-    printf("cmd_read: %s\n", readFromMem("DISC2", 4));
-}
+//
+//void testWriteRead(){
+//    writeToMem(0, 100, "liheng");
+//    writeToMem(0, 100, "lihengsdfsdfs");
+//    writeToMem(0, 100, "lihengsdfsdfsd");
+//
+//    printf("cmd_read: %s\n", readFromMem("DISC", 0));
+//    printf("cmd_read: %s\n", readFromMem("DISC", 2));
+//    printf("cmd_read: %s\n", readFromMem("DISC", 4));
+//
+//    writeToMem(1, 100, "lihengsdfsdfsdfsd");
+//    writeToMem(1, 100, "lihengsdfsdfs");
+//    writeToMem(1, 100, "lihengsdfsdfsd");
+//
+//    printf("cmd_read: %s\n", readFromMem("DISC2", 0));
+//    printf("cmd_read: %s\n", readFromMem("DISC2", 2));
+//    printf("cmd_read: %s\n", readFromMem("DISC2", 4));
+//}

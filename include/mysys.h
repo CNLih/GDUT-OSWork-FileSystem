@@ -32,22 +32,22 @@ typedef struct{
 }workPlace;
 
 //已经加载的磁盘数
-int LoadDiscSize;
+extern int LoadDiscSize;
 
 //加载的inode表
-form *loadedInode[MAX_LOAD_DISC];
+extern form *loadedInode[MAX_LOAD_DISC];
 
 //磁盘挂载处
-discType *loadedDisc[MAX_LOAD_DISC];
+extern discType *loadedDisc[MAX_LOAD_DISC];
 
 //磁盘基本路径
-workPlace workingPlace[MAX_LOAD_DISC];
+extern workPlace workingPlace[MAX_LOAD_DISC];
 
 //当前登录的用户
-int CurUserId;
-char CurUserName[MAX_USER_SIZE];
+extern int CurUserId;
+extern char CurUserName[MAX_USER_SIZE];
 
-int workingDisc;
+extern int workingDisc;
 
 void sysParaInit();
 
@@ -64,5 +64,7 @@ void updateChildFile(int index);
 void useDisc(int index);
 
 int login(const char *name, const char *password);
+
+void updateConfig();
 
 #endif //FILESYSTEM_MYSYS_H

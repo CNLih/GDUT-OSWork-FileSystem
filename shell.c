@@ -6,12 +6,17 @@
 #include <stdlib.h>
 #include "include/shell.h"
 #include "include/mysys.h"
+#include "include/user.h"
 
-const char *shellFunc[FUNC_NUM] = {"help", "debug_mem", "ls", "cd", "mkdir", "write", "read", "disc", "use", "login", "exit"};
+char workingDir[128];
+
+const char *shellFunc[FUNC_NUM] = {"help", "debug_mem", "logout", "adduser", "ls", "cd", "mkdir", "write", "read", "disc", "use", "login", "exit"};
 const char helpMess[FUNC_NUM][128] = {
         "[use: help]",
         "[use: debug_mem]",
-        "[use: ls [-l]]",
+        "[use: logout]",
+        "[use: adduser [name] [password]",
+        "[use: ls (-l)]",
         "[use: cd [./../file name]]",
         "[use: mkdir [name]]",
         "[use: write [name] (--size) [content]]",
@@ -21,9 +26,12 @@ const char helpMess[FUNC_NUM][128] = {
         "[use: login [name] [password]]",
         "[use: exit]"
 };
+
 enum FUNC_LIST{
     HELP,
     MEM,
+    LOGOUT,
+    ADDUSER,
     LS,
     CD,
     MKDIR,
@@ -133,6 +141,19 @@ int cmd_write(char *name, char *content, int size, int pri) {
     updateChildFile(workingDisc);
 }
 
+void cmd_add_user(const char *name, const char *pass){
+    int ret;
+
+    ret = newUser(name, pass);
+    if(ret == -1){
+        printf("user counts has reach max\n");
+    }else if(ret == -2){
+        printf("sorry, this name is not available\n");
+    }else{
+        printf("%s added\n", name);
+    }
+}
+
 /**
  *
  * @param name
@@ -164,7 +185,7 @@ int cmd_read(char *name){
                 return -1;
             }
             printf("%s:\n", name);
-            printf("%s\n", readFromMem(loadedDisc[workingDisc]->DiscName, workingPlace[workingDisc].childFile[i]->startBlock));
+            printf("%s\n", readFromMem(workingDisc, workingPlace[workingDisc].childFile[i]->startBlock));
             return 1;
         }
     }
@@ -269,13 +290,23 @@ void shellRun(){
             case MEM:
                 debugForm(workingDisc);
                 break;
-            case LS:
-                if(argc > 2){
+            case LOGOUT:
+                CurUserId = -1;
+                break;
+            case ADDUSER:
+                if(argc < 3){
                     printErr(choice);
-                }else if(argc == 1){
+                }else{
+                    cmd_add_user(argv[1], argv[2]);
+                }
+                break;
+            case LS:
+                if(argc == 1){
                     cmd_ls(1);
                 }else if(argc == 2 && (strcmp(argv[1], "-l") == 0)){
                     cmd_ls(2);
+                }else{
+                    printErr(choice);
                 }
                 break;
             case CD:{
@@ -364,6 +395,9 @@ void shellRun(){
                     ret = login(argv[1], argv[2]);
                 }
                 switch (ret) {
+                    case 1:
+                        printf("welcome %s use help to start\n", CurUserName);
+                        break;
                     case -1:
                         printf("Error: password error\n");
                         break;
